@@ -36,7 +36,6 @@ cd softdesk_api
 pip install pipenv
 pipenv install
 pipenv shell
-
 ```
 
 ou/or 
@@ -45,29 +44,22 @@ ou/or
 pip install poetry
 poetry install
 poetry shell
-
 ```
 
 
-2. Installez les dépendances / Install dependencies
-
-```
-pip install -r requirements.txt
-```
-
-Configurez la base de données / Configure the database
+2. Configurez la base de données / Configure the database
 
 
 ```
 python manage.py migrate
 ```
 
-1. Lancez le serveur de développement / Run the development server
+3. Lancez le serveur de développement / Run the development server
 ```
 python manage.py runserver
 ```
 
-Accédez à l'application sur http://127.0.0.1:8000.
+Accédez à l'application sur / you can have access to your application on http://127.0.0.1:8000.
 
 
 #### Comment tester / How to try
