@@ -21,11 +21,11 @@ def authenticate_user(request):
 
     try:
 
-        email = request.data['email']
+        username = request.data['username']
 
         password = request.data['password']
 
-        user = User.objects.get(email=email, password=password)
+        user = User.objects.get(username=username, password=password)
 
         if user:
 
