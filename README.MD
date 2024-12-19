@@ -63,3 +63,4 @@ Accédez à l'application sur / you can have access to your application on http:
 
 
 #### Comment tester / How to try
+Admin login : Admin / admin@admin.fr / admin
