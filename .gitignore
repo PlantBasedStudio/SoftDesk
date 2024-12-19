@@ -1,5 +1,7 @@
 venv/
 env/
+.venv/
+*.env
 *.pyc
 *.pyo
 *.pyd

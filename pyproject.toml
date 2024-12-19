@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "softdesk-api"
+version = "0.1.0"
+description = "requirements"
+authors = ["Damien <ultrarushgame@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+asgiref = "3.8.1"
+django = "5.1.4"
+sqlparse = "0.5.3"
+typing-extensions = "4.12.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

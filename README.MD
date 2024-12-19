@@ -31,19 +31,23 @@ cd softdesk_api
 #### **2. Créez et activez un environnement virtuel / Create and activate a virtual environment**
 
 1. Lancer l'environnement / create a virtual environment
-Sous Windows / On Windows :
 
 ```
-python -m venv env
-env\Scripts\activate
-```
-
-Sous Linux / On Linux :
+pip install pipenv
+pipenv install
+pipenv shell
 
 ```
-python3 -m venv env
-source env/bin/activate
+
+ou/or 
+
 ```
+pip install poetry
+poetry install
+poetry shell
+
+```
+
 
 2. Installez les dépendances / Install dependencies
 
