@@ -48,7 +48,7 @@ class ContributorSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Contributor
-        fields = ['id', 'user', 'user_id', 'permission', 'project']
+        fields = ['id', 'user', 'user_id', 'role', 'project']
         read_only_fields = ['project']
 
 class IssueSerializer(serializers.ModelSerializer):

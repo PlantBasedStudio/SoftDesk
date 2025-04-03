@@ -32,6 +32,7 @@ class Contributor(models.Model):
     role = models.CharField(max_length=255, default="Contributor")
 
     class Meta:
+        ordering = ['id']
         unique_together = ('user', 'project')
 
     def __str__(self):
