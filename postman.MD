@@ -136,8 +136,3 @@
     }
     ```
 
-    - Lister les commentaires (GET):
-    ```
-    http://localhost:8000/projectfrom rest_framework.routers import DefaultRouter
-from rest_framework_nested.routers import NestedDefaultRouters/1/issues/1/comments/
-    ```
