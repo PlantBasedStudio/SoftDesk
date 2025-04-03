@@ -1,103 +1,62 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import User
-from .serializers import UserSerializer
-from rest_framework.decorators import api_view, permission_classes
+from softdesk_api.serializers import UserSerializer
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.generics import RetrieveUpdateAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from django.contrib.auth.signals import user_logged_in
+from rest_framework.permissions import IsAuthenticated
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
+    permission_classes = [IsAuthenticated]
 
 @api_view(['POST'])
-@permission_classes([AllowAny, ])
-def authenticate_user(request):
+def register_user(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'user': serializer.data
+        }, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    try:
-
-        username = request.data['username']
-
-        password = request.data['password']
-
-        user = User.objects.get(username=username, password=password)
-
-        if user:
-
-            try:
-
-                refresh = RefreshToken.for_user(user)
-                token = str(refresh.access_token)
-
-                user_details = {}
-
-                user_details['name'] = "%s %s" % (
-
-                    user.first_name, user.last_name)
-
-                user_details['token'] = token
-
-                user_logged_in.send(sender=user.__class__,
-
-                                    request=request, user=user)
-
-                return Response(user_details, status=status.HTTP_200_OK)
-
-            except Exception as e:
-
-                raise e
-
-        else:
-
-            res = {
-
-                'error': 'can not authenticate with the given credentials or the account has been deactivated'}
-
-            return Response(res, status=status.HTTP_403_FORBIDDEN)
-
-    except KeyError:
-
-        res = {'error': 'please provide a email and a password'}
-
-        return Response(res)
+@api_view(['POST'])
+def login_user(request):
+    username = request.data.get('username', '')
+    password = request.data.get('password', '')
     
+    user = authenticate(username=username, password=password)
+    
+    if user:
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'user': UserSerializer(user).data
+        })
+    return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
-
-    # Allow only authenticated users to access this url
-
-    permission_classes = (IsAuthenticated,)
-
+    permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
 
     def get(self, request, *args, **kwargs):
-
-        # serializer to handle turning our `User` object into something that
-
-        # can be JSONified and sent to the client.
-
         serializer = self.serializer_class(request.user)
-
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, *args, **kwargs):
-
         serializer_data = request.data.get('user', {})
-
         serializer = UserSerializer(
-
             request.user, data=serializer_data, partial=True
-
         )
-
         serializer.is_valid(raise_exception=True)
-
         serializer.save()
-
         return Response(serializer.data, status=status.HTTP_200_OK)
-
