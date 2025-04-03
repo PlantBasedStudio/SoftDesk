@@ -9,6 +9,8 @@ class User(AbstractUser):
     can_data_be_shared = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        if self.age and self.age < 15:
+        if self.age is not None and self.age < 15:
+            self.can_be_contacted = False
+            self.can_data_be_shared = False
             raise ValueError("L'utilisateur doit avoir au moins 15 ans.")
         super().save(*args, **kwargs)
